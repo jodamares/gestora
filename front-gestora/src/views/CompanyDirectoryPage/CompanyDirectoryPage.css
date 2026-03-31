@@ -12,6 +12,11 @@
 .company-directory__header a {
   color: var(--primary-dark);
   text-decoration: none;
+  font-weight: 600;
+}
+
+.company-directory__header a:hover {
+  text-decoration: underline;
 }
 
 .company-directory__error {
@@ -49,9 +54,9 @@
 
 .company-directory__panel {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: 0.8rem;
-  padding: 0.9rem;
+  padding: 1rem 0.2rem 1rem 0.5rem;
 }
 
 .company-directory__inline-form {
@@ -65,13 +70,27 @@
   font: inherit;
   padding: 0.45rem 0.6rem;
   border-radius: 0.45rem;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
+  background: #fffdf8;
+}
+
+.company-directory__inline-form input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.15);
 }
 
 .company-directory__inline-form button {
-  background: var(--primary);
+  background: linear-gradient(145deg, var(--primary), var(--primary-dark));
   color: #fff;
   border: none;
+  font-weight: 600;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.company-directory__inline-form button:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
 .company-directory__list {
@@ -85,15 +104,23 @@
 .company-directory__list button {
   width: 100%;
   text-align: left;
-  border: 1px solid var(--border);
-  background: #fff;
+  border: 1.5px solid var(--border);
+  background: #fffdf8;
   border-radius: 0.45rem;
   padding: 0.45rem 0.6rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.company-directory__list button:hover {
+  border-color: var(--primary-light);
+  background: #fef9ec;
 }
 
 .company-directory__list button.active {
-  background: #ecfdf5;
-  border-color: #99f6e4;
+  background: #fef9ec;
+  border-color: var(--primary);
+  color: var(--primary-dark);
+  font-weight: 600;
 }
 
 .company-directory__table {
@@ -108,9 +135,20 @@
   padding: 0.5rem;
 }
 
+.company-directory__table th {
+  color: var(--text-muted);
+  font-size: 0.83rem;
+  font-weight: 600;
+}
+
 .company-directory__table a {
   color: var(--primary-dark);
   text-decoration: none;
+  font-weight: 600;
+}
+
+.company-directory__table a:hover {
+  text-decoration: underline;
 }
 
 @media (min-width: 1024px) {

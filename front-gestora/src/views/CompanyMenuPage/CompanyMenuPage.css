@@ -17,6 +17,9 @@
   margin: 0 0 0.3rem;
   color: var(--primary-dark);
   font-weight: 600;
+  font-size: 0.84rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .company-menu__title {
@@ -40,15 +43,16 @@
   width: fit-content;
   border-radius: 12px;
   color: #fff;
-  padding: 0.65rem 1rem;
+  padding: 0.65rem 1.1rem;
   background: linear-gradient(145deg, var(--primary), var(--primary-dark));
   font-weight: 600;
+  box-shadow: 0 4px 14px rgba(var(--primary-rgb), 0.3);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .company-menu__quick-action:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(var(--primary-rgb), 0.25);
+  box-shadow: 0 8px 20px rgba(var(--primary-rgb), 0.4);
 }
 
 .company-menu__stats {
@@ -70,6 +74,7 @@
   margin: 0.25rem 0;
   font-size: 1.45rem;
   font-weight: 600;
+  color: var(--primary-dark);
 }
 
 .company-menu__stat-trend {
@@ -129,6 +134,7 @@
 .company-menu__activity-list span {
   color: var(--text-muted);
   font-size: 0.8rem;
+  white-space: nowrap;
 }
 
 .company-menu__chart {
@@ -142,9 +148,15 @@
 .company-menu__bar {
   height: var(--value);
   min-height: 40px;
-  background: linear-gradient(180deg, #a5b4fc, var(--primary));
+  background: linear-gradient(180deg, var(--primary-light), var(--primary-dark));
   border-radius: 10px 10px 6px 6px;
   position: relative;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+
+.company-menu__bar:hover {
+  opacity: 1;
 }
 
 .company-menu__bar span {

@@ -3,45 +3,104 @@
   display: grid;
   place-items: center;
   padding: 1rem;
+  background: var(--bg);
 }
 
 .auth-page__card {
   width: min(100%, 26rem);
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 0.9rem;
-  padding: 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.75rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.auth-page__logo {
+  display: block;
+  height: 64px;
+  width: auto;
+  margin: 0 auto 1.5rem;
+  object-fit: contain;
 }
 
 .auth-page__card h1 {
-  margin-top: 0;
+  margin: 0 0 1.25rem;
+  font-size: 1.35rem;
+  text-align: center;
+  color: var(--text);
 }
 
 .auth-page form {
   display: grid;
-  gap: 0.7rem;
+  gap: 0.85rem;
 }
 
 .auth-page label {
   display: grid;
-  gap: 0.3rem;
+  gap: 0.35rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text);
 }
 
-.auth-page input,
+.auth-page input {
+  font: inherit;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.75rem;
+  background: #fffdf8;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-page input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.15);
+}
+
 .auth-page button {
   font: inherit;
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  padding: 0.55rem 0.7rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.75rem;
+  background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(var(--primary-rgb), 0.35);
 }
 
-.auth-page button {
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  font-weight: 700;
+.auth-page button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(var(--primary-rgb), 0.4);
+}
+
+.auth-page button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
 }
 
 .auth-page__error {
   color: var(--error);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.auth-page > p,
+.auth-page__card > p {
+  text-align: center;
+  margin-top: 1.25rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.auth-page__card a {
+  color: var(--primary-dark);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-page__card a:hover {
+  text-decoration: underline;
 }
