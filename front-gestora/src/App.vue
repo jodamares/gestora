@@ -38,9 +38,15 @@ const closeMobileNav = () => {
       }"
     >
       <div class="app-shell__brand-row">
-        <div v-if="!sidebarCollapsed" class="app-shell__brand">Gestor Empresarial</div>
+        <img
+          v-if="!sidebarCollapsed"
+          src="/logo-large.png"
+          alt="Gestor Empresarial"
+          class="app-shell__logo"
+        />
+        <span v-else class="app-shell__logo-initial">G</span>
         <button type="button" class="app-shell__ghost-btn" @click="toggleSidebar">
-          {{ sidebarCollapsed ? '>' : '<' }}
+          {{ sidebarCollapsed ? '›' : '‹' }}
         </button>
       </div>
       <nav class="app-shell__nav">
@@ -83,8 +89,8 @@ const closeMobileNav = () => {
   width: 280px;
   min-height: 100vh;
   padding: 1rem;
-  background: var(--surface);
-  border-right: 1px solid var(--border);
+  background: #fffdf8;
+  border-right: 2px solid var(--border);
   transition: width 0.24s ease, transform 0.24s ease;
   box-shadow: var(--shadow);
   z-index: 20;
@@ -98,12 +104,31 @@ const closeMobileNav = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1.5px solid var(--border);
 }
 
-.app-shell__brand {
+.app-shell__logo {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+}
+
+.app-shell__logo-initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+  color: #fff;
   font-weight: 700;
+  font-size: 1.1rem;
   letter-spacing: -0.01em;
+  margin: 0 auto;
+  box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.35);
 }
 
 .app-shell__nav {
@@ -122,13 +147,14 @@ const closeMobileNav = () => {
 }
 
 .app-shell__nav a:hover {
-  background: #eef2ff;
+  background: #fdf3d6;
   color: var(--primary-dark);
 }
 
 .app-shell__nav a.router-link-active {
   background: linear-gradient(145deg, var(--primary), var(--primary-dark));
   color: #fff;
+  box-shadow: 0 2px 10px rgba(201, 168, 76, 0.3);
 }
 
 .app-shell__logout {
@@ -163,12 +189,18 @@ const closeMobileNav = () => {
 }
 
 .app-shell__logout-top {
-  border: 1px solid #fecaca;
-  background: #fff1f2;
-  color: #be123c;
+  border: 2px solid var(--primary);
+  background: transparent;
+  color: var(--primary-dark);
   border-radius: 10px;
   padding: 0.5rem 0.75rem;
   font-weight: 600;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.app-shell__logout-top:hover {
+  background: #fef9ec;
+  color: var(--primary-dark);
 }
 
 .app-shell__menu-toggle {

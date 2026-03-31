@@ -1,6 +1,7 @@
 <template>
   <main class="auth-page">
     <section class="auth-page__card">
+      <img src="/logo-large.png" alt="Gestor Empresarial" class="auth-page__logo" />
       <h1>Iniciar sesion</h1>
       <form @submit.prevent="submit">
         <label>
