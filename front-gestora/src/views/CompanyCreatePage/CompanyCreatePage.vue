@@ -61,6 +61,7 @@
           <label class="company-create__full">
             Documento Word de la empresa (.doc/.docx)
             <input
+              ref="fileInputRef"
               type="file"
               accept=".doc,.docx"
               @change="onFileChange"

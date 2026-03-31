@@ -35,9 +35,13 @@ export default {
       fileTouched.value = true
     }
 
+    const fileInputRef = ref(null)
+
     const resetForm = () => {
       Object.assign(form, initialForm())
       documentFile.value = null
+      fileTouched.value = false
+      if (fileInputRef.value) fileInputRef.value.value = ''
     }
 
     const submitForm = async () => {
@@ -100,6 +104,7 @@ export default {
       error,
       success,
       isFileInvalid,
+      fileInputRef,
       onFileChange,
       submitForm,
       nextStep,
