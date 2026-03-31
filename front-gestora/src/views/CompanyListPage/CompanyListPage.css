@@ -1,5 +1,7 @@
 .company-list {
   padding: 1rem;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .company-list__card {
@@ -74,11 +76,15 @@
 
 .company-list__table-wrapper {
   margin-top: 1rem;
-  overflow: visible;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
 }
 
 .company-list__table {
   width: 100%;
+  min-width: 600px;
   border-collapse: collapse;
 }
 
