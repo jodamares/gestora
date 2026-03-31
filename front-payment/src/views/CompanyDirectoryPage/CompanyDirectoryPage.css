@@ -1,0 +1,120 @@
+.company-directory {
+  padding: 1rem;
+}
+
+.company-directory__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.company-directory__header a {
+  color: var(--primary-dark);
+  text-decoration: none;
+}
+
+.company-directory__error {
+  color: var(--error);
+}
+
+.company-directory__rule {
+  margin: 0.75rem 0 0;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.company-directory__hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.company-directory__inline-form--disabled {
+  opacity: 0.65;
+}
+
+.company-directory__inline-form button:disabled,
+.company-directory__inline-form input:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.company-directory__grid {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.company-directory__panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.8rem;
+  padding: 0.9rem;
+}
+
+.company-directory__inline-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.company-directory__inline-form input,
+.company-directory__inline-form button {
+  font: inherit;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.45rem;
+  border: 1px solid var(--border);
+}
+
+.company-directory__inline-form button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+}
+
+.company-directory__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.company-directory__list button {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 0.45rem;
+  padding: 0.45rem 0.6rem;
+}
+
+.company-directory__list button.active {
+  background: #ecfdf5;
+  border-color: #99f6e4;
+}
+
+.company-directory__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.company-directory__table th,
+.company-directory__table td {
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem;
+}
+
+.company-directory__table a {
+  color: var(--primary-dark);
+  text-decoration: none;
+}
+
+@media (min-width: 1024px) {
+  .company-directory__grid {
+    grid-template-columns: 320px 1fr;
+  }
+}
