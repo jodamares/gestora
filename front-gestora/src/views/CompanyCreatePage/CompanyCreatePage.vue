@@ -10,15 +10,15 @@
     <section v-else class="company-create__card surface-card">
       <header class="company-create__header">
         <div>
-          <p class="company-create__eyebrow">Creacion de empresa</p>
+          <p class="company-create__eyebrow">Creación de empresa</p>
           <h1>Formulario de registro</h1>
         </div>
         <RouterLink to="/companies">Ver listado</RouterLink>
       </header>
 
       <div class="company-create__steps" aria-label="Progreso">
-        <span :class="{ active: currentStep >= 1 }">1. Basico</span>
-        <span :class="{ active: currentStep >= 2 }">2. Contacto</span>
+        <span :class="{ active: currentStep >= 1, done: currentStep > 1 }">{{ currentStep > 1 ? '✓' : '1.' }} Básico</span>
+        <span :class="{ active: currentStep >= 2, done: currentStep > 2 }">{{ currentStep > 2 ? '✓' : '2.' }} Contacto</span>
         <span :class="{ active: currentStep >= 3 }">3. Plantilla</span>
       </div>
 
@@ -44,7 +44,7 @@
             <input v-model.trim="form.department" type="text" required />
           </label>
           <label>
-            Numero de telefono
+            Número de teléfono
             <input v-model.trim="form.phoneNumber" type="text" required />
           </label>
           <label class="company-create__full">
@@ -55,7 +55,7 @@
 
         <template v-if="currentStep === 3">
           <label class="company-create__full">
-            Descripcion
+            Descripción
             <textarea v-model.trim="form.description" rows="4" required />
           </label>
           <label class="company-create__full">

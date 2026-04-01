@@ -151,6 +151,49 @@
   text-decoration: underline;
 }
 
+.company-directory__list button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.company-directory__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  gap: 0.5rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.company-directory__empty svg {
+  color: var(--border);
+}
+
+.company-directory__empty p {
+  margin: 0;
+}
+
+.company-directory__sk-line {
+  height: 0.85rem;
+  margin-bottom: 0.6rem;
+  border-radius: 6px;
+}
+
+.company-directory__sk-line--title {
+  width: 50%;
+  height: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.company-directory__sk-line--sm {
+  width: 35%;
+  margin: 0;
+}
+
 @media (min-width: 1024px) {
   .company-directory__grid {
     grid-template-columns: 320px 1fr;

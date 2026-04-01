@@ -20,6 +20,7 @@ export default {
     const selectedFile = ref(null)
     const fileInputRef = ref(null)
     const error = ref('')
+    const loading = ref(false)
 
     const loadFolders = async () => {
       folders.value = await getCompanyFolders(companyId.value)
@@ -41,12 +42,15 @@ export default {
 
     const loadAll = async () => {
       error.value = ''
+      loading.value = true
       try {
         await loadFolders()
         pickDefaultFolder()
         await loadFiles()
       } catch (err) {
         error.value = err?.message || 'No se pudo cargar el directorio.'
+      } finally {
+        loading.value = false
       }
     }
 
@@ -122,6 +126,7 @@ export default {
       newFolderName,
       fileInputRef,
       error,
+      loading,
       canUpload,
       handleCreateFolder,
       handleUpload,

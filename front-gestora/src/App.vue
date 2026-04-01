@@ -6,8 +6,22 @@ import { useRouter } from 'vue-router'
 const store = useStore()
 const router = useRouter()
 const isAuthenticated = computed(() => store.getters.isAuthenticated)
+const authUser = computed(() => store.state.authUser)
 const sidebarCollapsed = ref(false)
 const mobileNavOpen = ref(false)
+
+const userInitials = computed(() => {
+  const u = authUser.value
+  if (!u) return 'U'
+  const name = u.fullName || u.name || u.email || ''
+  return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'U'
+})
+
+const userDisplayName = computed(() => {
+  const u = authUser.value
+  if (!u) return ''
+  return u.fullName || u.name || u.email || ''
+})
 
 const logout = () => {
   store.dispatch('logout')
@@ -44,31 +58,54 @@ const closeMobileNav = () => {
           alt="Gestor Empresarial"
           class="app-shell__logo"
         />
-        <span v-else class="app-shell__logo-initial">G</span>
+        <span v-else class="app-shell__logo-initial">DGT</span>
         <button type="button" class="app-shell__ghost-btn" @click="toggleSidebar">
           {{ sidebarCollapsed ? '›' : '‹' }}
         </button>
       </div>
       <nav class="app-shell__nav">
-        <RouterLink to="/" @click="closeMobileNav">
-          <span v-if="!sidebarCollapsed">Inicio</span>
-          <span v-else>I</span>
+        <RouterLink to="/" @click="closeMobileNav" class="app-shell__nav-link">
+          <svg class="app-shell__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+            <polyline points="9,22 9,12 15,12 15,22"/>
+          </svg>
+          <span v-if="!sidebarCollapsed" class="app-shell__nav-label">Inicio</span>
         </RouterLink>
-        <RouterLink to="/companies" @click="closeMobileNav">
-          <span v-if="!sidebarCollapsed">Gestion de empresas</span>
-          <span v-else>G</span>
+        <RouterLink to="/companies" @click="closeMobileNav" class="app-shell__nav-link">
+          <svg class="app-shell__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
+          </svg>
+          <span v-if="!sidebarCollapsed" class="app-shell__nav-label">Gestión de empresas</span>
         </RouterLink>
-        <RouterLink to="/companies/create" @click="closeMobileNav">
-          <span v-if="!sidebarCollapsed">Crear empresa</span>
-          <span v-else>C</span>
+        <RouterLink to="/companies/create" @click="closeMobileNav" class="app-shell__nav-link">
+          <svg class="app-shell__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+          </svg>
+          <span v-if="!sidebarCollapsed" class="app-shell__nav-label">Crear empresa</span>
         </RouterLink>
       </nav>
     </aside>
 
     <main class="app-shell__content">
       <header v-if="isAuthenticated" class="app-shell__topbar">
-        <button type="button" class="app-shell__ghost-btn app-shell__menu-toggle" @click="toggleMobileNav">Menu</button>
-        <button type="button" class="app-shell__logout-top" @click="logout">Cerrar sesion</button>
+        <button type="button" class="app-shell__menu-toggle" @click="toggleMobileNav">
+          <img src="/logo-large.png" alt="Gestor" class="app-shell__topbar-logo" />
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <div class="app-shell__topbar-right">
+          <div v-if="userDisplayName" class="app-shell__user-info">
+            <span class="app-shell__user-avatar">{{ userInitials }}</span>
+            <span class="app-shell__user-name">{{ userDisplayName }}</span>
+          </div>
+          <button type="button" class="app-shell__logout-top" @click="logout">Cerrar sesión</button>
+        </div>
       </header>
       <RouterView />
     </main>
@@ -129,6 +166,8 @@ const closeMobileNav = () => {
   letter-spacing: -0.01em;
   margin: 0 auto;
   box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.35);
+  padding: 0.7rem 1.5rem;
+  margin-right: 0.5rem;
 }
 
 .app-shell__nav {
@@ -137,8 +176,10 @@ const closeMobileNav = () => {
   gap: 0.45rem;
 }
 
-.app-shell__nav a {
-  color: var(--text-muted);
+.app-shell__nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
   color: var(--text);
   text-decoration: none;
   border-radius: 10px;
@@ -146,15 +187,33 @@ const closeMobileNav = () => {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.app-shell__nav a:hover {
+.app-shell__nav-icon {
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.app-shell__nav-label {
+  font-size: 0.95rem;
+}
+
+.app-shell__nav-link:hover {
   background: #fdf3d6;
   color: var(--primary-dark);
 }
 
-.app-shell__nav a.router-link-active {
+.app-shell__nav-link:hover .app-shell__nav-icon {
+  opacity: 1;
+}
+
+.app-shell__nav-link.router-link-active {
   background: linear-gradient(145deg, var(--primary), var(--primary-dark));
   color: #fff;
   box-shadow: 0 2px 10px rgba(201, 168, 76, 0.3);
+}
+
+.app-shell__nav-link.router-link-active .app-shell__nav-icon {
+  opacity: 1;
 }
 
 .app-shell__logout {
@@ -188,6 +247,47 @@ const closeMobileNav = () => {
   padding: 0.9rem 1rem 0;
 }
 
+.app-shell__topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.app-shell__user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.app-shell__user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-shell__user-name {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-shell__topbar-logo {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+}
+
 .app-shell__logout-top {
   border: 2px solid var(--primary);
   background: transparent;
@@ -205,6 +305,13 @@ const closeMobileNav = () => {
 
 .app-shell__menu-toggle {
   display: none;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.35rem 0.6rem;
+  color: var(--text-muted);
 }
 
 @media (max-width: 1023px) {
@@ -232,17 +339,17 @@ const closeMobileNav = () => {
   .app-shell__menu-toggle {
     display: inline-flex;
   }
+
+  .app-shell__user-name {
+    display: none;
+  }
 }
 
 @media (min-width: 1024px) {
-  .app-shell__sidebar--collapsed .app-shell__nav a {
-    text-align: center;
+  .app-shell__sidebar--collapsed .app-shell__nav-link {
     justify-content: center;
-    display: flex;
-    align-items: center;
     padding-left: 0.35rem;
     padding-right: 0.35rem;
-    font-weight: 700;
   }
 }
 </style>

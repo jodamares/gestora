@@ -3,7 +3,7 @@
     <section class="company-list__card surface-card">
       <header class="company-list__header">
         <div>
-          <p class="company-list__eyebrow">Gestion de empresas</p>
+          <p class="company-list__eyebrow">Gestión de empresas</p>
           <h1>Empresas registradas</h1>
         </div>
         <div class="company-list__links">
@@ -28,7 +28,15 @@
         <div class="skeleton company-list__sk-line"></div>
       </div>
       <p v-else-if="error" class="company-list__error">{{ error }}</p>
-      <p v-else-if="filteredCompanies.length === 0">No hay empresas que coincidan con los filtros.</p>
+      <div v-else-if="filteredCompanies.length === 0" class="company-list__empty">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2"/>
+          <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
+        </svg>
+        <p class="company-list__empty-title">No hay empresas registradas</p>
+        <p class="company-list__empty-sub">Crea la primera empresa para comenzar.</p>
+        <RouterLink to="/companies/create" class="company-list__empty-action">Crear empresa</RouterLink>
+      </div>
 
       <div v-else class="company-list__table-wrapper">
         <table class="company-list__table">

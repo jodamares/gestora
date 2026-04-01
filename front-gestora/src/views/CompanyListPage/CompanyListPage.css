@@ -205,6 +205,54 @@
   height: 1.4rem;
 }
 
+.company-list__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  gap: 0.5rem;
+  color: var(--text-muted);
+}
+
+.company-list__empty svg {
+  color: var(--border);
+  margin-bottom: 0.5rem;
+}
+
+.company-list__empty-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.company-list__empty-sub {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.company-list__empty-action {
+  margin-top: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 1.1rem;
+  background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.company-list__empty-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(var(--primary-rgb), 0.4);
+}
+
 @media (min-width: 768px) {
   .company-list__toolbar {
     grid-template-columns: 1fr 240px;

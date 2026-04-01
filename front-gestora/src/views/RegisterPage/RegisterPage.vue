@@ -13,15 +13,15 @@
           <input v-model.trim="email" type="email" required />
         </label>
         <label>
-          Contrasena
+          Contraseña
           <input v-model="password" type="password" required minlength="6" />
         </label>
         <p v-if="error" class="auth-page__error">{{ error }}</p>
         <button :disabled="loading" type="submit">{{ loading ? 'Creando...' : 'Crear usuario' }}</button>
       </form>
       <p>
-        Ya tienes cuenta?
-        <RouterLink to="/login">Iniciar sesion</RouterLink>
+        ¿Ya tienes cuenta?
+        <RouterLink to="/login">Iniciar sesión</RouterLink>
       </p>
     </section>
   </main>
