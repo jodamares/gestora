@@ -32,7 +32,15 @@
 
 .company-list__links {
   display: flex;
-  gap: 0.75rem;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 480px) {
+  .company-list__links {
+    flex-direction: row;
+    gap: 0.75rem;
+  }
 }
 
 .company-list__links a {

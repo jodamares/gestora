@@ -43,6 +43,7 @@ const closeMobileNav = () => {
 
 <template>
   <div id="app" class="app-shell">
+    <div v-if="mobileNavOpen" class="app-shell__backdrop" @click="closeMobileNav"></div>
     <aside
       v-if="isAuthenticated"
       class="app-shell__sidebar"
@@ -59,8 +60,8 @@ const closeMobileNav = () => {
           class="app-shell__logo"
         />
         <span v-else class="app-shell__logo-initial">DGT</span>
-        <button type="button" class="app-shell__ghost-btn" @click="toggleSidebar">
-          {{ sidebarCollapsed ? '›' : '‹' }}
+        <button type="button" class="app-shell__ghost-btn" @click="mobileNavOpen ? closeMobileNav() : toggleSidebar()">
+          {{ sidebarCollapsed && !mobileNavOpen ? '›' : '‹' }}
         </button>
       </div>
       <nav class="app-shell__nav">
@@ -303,6 +304,10 @@ const closeMobileNav = () => {
   color: var(--primary-dark);
 }
 
+.app-shell__backdrop {
+  display: none;
+}
+
 .app-shell__menu-toggle {
   display: none;
   align-items: center;
@@ -319,12 +324,20 @@ const closeMobileNav = () => {
     display: block;
   }
 
+  .app-shell__backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 19;
+  }
+
   .app-shell__sidebar {
     position: fixed;
     top: 0;
     left: 0;
     transform: translateX(-100%);
-    width: 280px;
+    width: 280px !important;
   }
 
   .app-shell__sidebar--open {
