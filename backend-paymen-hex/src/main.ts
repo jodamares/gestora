@@ -12,7 +12,12 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin) || /\.vercel\.app$/.test(origin)) {
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        /\.vercel\.app$/.test(origin) ||
+        /\.railway\.app$/.test(origin)
+      ) {
         callback(null, true);
       } else {
         callback(new Error(`CORS bloqueado: ${origin}`));
