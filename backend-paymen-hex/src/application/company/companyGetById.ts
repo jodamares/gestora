@@ -10,4 +10,8 @@ export class CompanyGetById {
   async runPublic(id: number) {
     return this.companyRepository.getById(id);
   }
+
+  async runPublicDocument(id: number) {
+    return this.companyRepository.getDocumentForDownload(id);
+  }
 }

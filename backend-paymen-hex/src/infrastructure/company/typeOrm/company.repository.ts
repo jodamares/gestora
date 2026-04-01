@@ -50,6 +50,17 @@ export class CompanyTypeOrmRepository implements CompanyRepository {
     });
     return entity ? mapEntity(entity) : null;
   }
+
+  async getDocumentForDownload(id: number): Promise<{ originalName: string; buffer: Buffer } | null> {
+    const entity = await this.companyEntityRepository.findOne({
+      where: { id },
+      select: ['id', 'documentOriginalName', 'documentContent'],
+    });
+    if (!entity?.documentContent?.length) {
+      return null;
+    }
+    return { originalName: entity.documentOriginalName, buffer: entity.documentContent };
+  }
 }
 
 function mapEntity(entity: CompanyEntity): Company {
@@ -64,7 +75,6 @@ function mapEntity(entity: CompanyEntity): Company {
     email: entity.email,
     description: entity.description,
     documentOriginalName: entity.documentOriginalName,
-    documentStoredName: entity.documentStoredName,
     createdAt: entity.createdAt,
   };
 }

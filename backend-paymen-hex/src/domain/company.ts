@@ -9,6 +9,5 @@ export interface Company {
   email: string;
   description: string;
   documentOriginalName: string;
-  documentStoredName: string;
   createdAt: Date;
 }

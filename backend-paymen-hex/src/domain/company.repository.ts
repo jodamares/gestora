@@ -10,7 +10,7 @@ export interface CompanyCreateInput {
   email: string;
   description: string;
   documentOriginalName: string;
-  documentStoredName: string;
+  documentContent: Buffer;
 }
 
 export interface CompanyRepository {
@@ -18,4 +18,5 @@ export interface CompanyRepository {
   getAllByUserId(userId: number): Promise<Company[]>;
   getByIdForUser(id: number, userId: number): Promise<Company | null>;
   getById(id: number): Promise<Company | null>;
+  getDocumentForDownload(id: number): Promise<{ originalName: string; buffer: Buffer } | null>;
 }

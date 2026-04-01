@@ -13,7 +13,7 @@ export class CompanyCreate {
     email: string;
     description: string;
     documentOriginalName: string;
-    documentStoredName: string;
+    documentContent: Buffer;
   }) {
     return this.companyRepository.create(input);
   }

@@ -14,8 +14,8 @@ export class CompanyFileEntity {
   @Column({ type: 'varchar', length: 255 })
   originalName: string;
 
-  @Column({ type: 'varchar', length: 255 })
-  storedName: string;
+  @Column({ type: 'bytea', select: false, nullable: true })
+  content: Buffer | null;
 
   @Column({ type: 'bigint' })
   size: string;

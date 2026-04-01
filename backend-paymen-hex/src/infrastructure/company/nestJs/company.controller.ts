@@ -16,20 +16,17 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import type { Response } from 'express';
-import { diskStorage } from 'multer';
+import { memoryStorage } from 'multer';
 import { CompanyCreate } from 'src/application/company/companyCreate';
 import { CompanyGetAll } from 'src/application/company/companyGetAll';
 import { CompanyGetById } from 'src/application/company/companyGetById';
 import { Company } from 'src/domain/company';
-import { existsSync, mkdirSync } from 'node:fs';
-import { extname, join } from 'node:path';
+import { extname } from 'node:path';
 import { CompanyDto } from './company.dto';
 import { CREATE_COMPANY, GET_ALL_COMPANIES, GET_COMPANY_BY_ID } from './tokens';
 import { CompanyDirectoryService } from './company-directory.service';
 import { JwtAuthGuard } from 'src/infrastructure/auth/nestJs/jwt-auth.guard';
 import { CurrentUserId } from 'src/infrastructure/auth/nestJs/current-user-id.decorator';
-
-const COMPANY_DOCUMENTS_DIR = join(process.cwd(), 'uploads', 'companies');
 
 @Controller('companies')
 export class CompanyController {
@@ -44,19 +41,7 @@ export class CompanyController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileInterceptor('document', {
-      storage: diskStorage({
-        destination: (_req, _file, callback) => {
-          if (!existsSync(COMPANY_DOCUMENTS_DIR)) {
-            mkdirSync(COMPANY_DOCUMENTS_DIR, { recursive: true });
-          }
-          callback(null, COMPANY_DOCUMENTS_DIR);
-        },
-        filename: (_req, file, callback) => {
-          const safeExt = extname(file.originalname) || '.docx';
-          const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${safeExt}`;
-          callback(null, uniqueName);
-        },
-      }),
+      storage: memoryStorage(),
       fileFilter: (_req, file, callback) => {
         const allowed = ['.doc', '.docx'];
         const extension = extname(file.originalname).toLowerCase();
@@ -70,7 +55,7 @@ export class CompanyController {
   )
   async create(
     @CurrentUserId() userId: number,
-    @UploadedFile() file: { originalname: string; filename: string },
+    @UploadedFile() file: MemoryUploadedFile,
     @Body() body: CreateCompanyBody,
   ): Promise<CompanyDto> {
     if (!file) {
@@ -88,7 +73,7 @@ export class CompanyController {
       email: body.email.trim().toLowerCase(),
       description: body.description.trim(),
       documentOriginalName: file.originalname,
-      documentStoredName: file.filename,
+      documentContent: file.buffer,
     });
 
     return mapToDto(company);
@@ -106,13 +91,17 @@ export class CompanyController {
     @Param('id', ParseIntPipe) id: number,
     @Res() response: Response,
   ): Promise<void> {
-    const company = await this.getCompanyById.runPublic(id);
-    if (!company) {
+    const doc = await this.getCompanyById.runPublicDocument(id);
+    if (!doc) {
       throw new NotFoundException('Empresa no encontrada');
     }
 
-    const filePath = join(COMPANY_DOCUMENTS_DIR, company.documentStoredName);
-    response.download(filePath, company.documentOriginalName);
+    response.setHeader('Content-Type', mimeFromFileName(doc.originalName));
+    response.setHeader(
+      'Content-Disposition',
+      `attachment; filename*=UTF-8''${encodeURIComponent(doc.originalName)}`,
+    );
+    response.send(doc.buffer);
   }
 
   @Post(':id/folders')
@@ -175,28 +164,14 @@ export class CompanyController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileInterceptor('file', {
-      storage: diskStorage({
-        destination: (req, _file, callback) => {
-          const companyId = Number(req.params.id);
-          const companyDir = join(COMPANY_DOCUMENTS_DIR, String(companyId));
-          if (!existsSync(companyDir)) {
-            mkdirSync(companyDir, { recursive: true });
-          }
-          callback(null, companyDir);
-        },
-        filename: (_req, file, callback) => {
-          const safeExt = extname(file.originalname);
-          const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${safeExt}`;
-          callback(null, uniqueName);
-        },
-      }),
+      storage: memoryStorage(),
       limits: { fileSize: 25 * 1024 * 1024 },
     }),
   )
   async uploadFile(
     @CurrentUserId() userId: number,
     @Param('id', ParseIntPipe) companyId: number,
-    @UploadedFile() file: { originalname: string; filename: string; size: number; mimetype: string },
+    @UploadedFile() file: MemoryUploadedFile,
     @Body() body: UploadFileBody,
   ) {
     if (!file) {
@@ -225,7 +200,7 @@ export class CompanyController {
       companyId,
       folderId,
       originalName: file.originalname,
-      storedName: file.filename,
+      content: file.buffer,
       size: file.size,
       mimeType: file.mimetype || 'application/octet-stream',
     });
@@ -283,14 +258,29 @@ export class CompanyController {
     @Param('fileId', ParseIntPipe) fileId: number,
     @Res() response: Response,
   ): Promise<void> {
-    const file = await this.companyDirectoryService.getFileById(companyId, fileId);
-    if (!file) {
+    const row = await this.companyDirectoryService.getFileForDownload(companyId, fileId);
+    if (!row?.content?.length) {
       throw new NotFoundException('Archivo no encontrado');
     }
 
-    const filePath = join(COMPANY_DOCUMENTS_DIR, String(companyId), file.storedName);
-    response.download(filePath, file.originalName);
+    response.setHeader('Content-Type', row.mimeType || 'application/octet-stream');
+    response.setHeader(
+      'Content-Disposition',
+      `attachment; filename*=UTF-8''${encodeURIComponent(row.originalName)}`,
+    );
+    response.send(row.content);
   }
+}
+
+function mimeFromFileName(fileName: string): string {
+  const ext = extname(fileName).toLowerCase();
+  if (ext === '.docx') {
+    return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+  }
+  if (ext === '.doc') {
+    return 'application/msword';
+  }
+  return 'application/octet-stream';
 }
 
 interface CreateCompanyBody {
@@ -310,6 +300,13 @@ interface CreateFolderBody {
 
 interface UploadFileBody {
   folderId?: string;
+}
+
+interface MemoryUploadedFile {
+  buffer: Buffer;
+  originalname: string;
+  size: number;
+  mimetype: string;
 }
 
 function validateCreateBody(body: CreateCompanyBody) {

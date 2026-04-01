@@ -43,7 +43,7 @@ export class CompanyDirectoryService {
     companyId: number;
     folderId?: number | null;
     originalName: string;
-    storedName: string;
+    content: Buffer;
     size: number;
     mimeType: string;
   }) {
@@ -51,7 +51,7 @@ export class CompanyDirectoryService {
       companyId: input.companyId,
       folderId: input.folderId ?? null,
       originalName: input.originalName,
-      storedName: input.storedName,
+      content: input.content,
       size: String(input.size),
       mimeType: input.mimeType,
     });
@@ -65,9 +65,10 @@ export class CompanyDirectoryService {
     });
   }
 
-  async getFileById(companyId: number, fileId: number) {
+  async getFileForDownload(companyId: number, fileId: number) {
     return this.fileRepository.findOne({
       where: { id: fileId, companyId },
+      select: ['id', 'companyId', 'folderId', 'originalName', 'mimeType', 'size', 'content', 'createdAt'],
     });
   }
 

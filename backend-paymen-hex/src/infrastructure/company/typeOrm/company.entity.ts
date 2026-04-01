@@ -47,8 +47,8 @@ export class CompanyEntity {
   @Column({ type: 'varchar', length: 255 })
   documentOriginalName: string;
 
-  @Column({ type: 'varchar', length: 255 })
-  documentStoredName: string;
+  @Column({ type: 'bytea', select: false, nullable: true })
+  documentContent: Buffer | null;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
