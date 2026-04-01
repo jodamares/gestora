@@ -75,7 +75,8 @@
           Elija una carpeta en la lista para habilitar la carga.
         </p>
 
-        <table class="company-directory__table" v-if="files.length > 0">
+        <div v-if="files.length > 0" class="company-directory__table-wrapper">
+        <table class="company-directory__table">
           <thead>
             <tr>
               <th>Nombre</th>
@@ -94,7 +95,8 @@
               </td>
             </tr>
           </tbody>
-        </table>
+          </table>
+        </div>
 
         <div v-else-if="canUpload" class="company-directory__empty">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">

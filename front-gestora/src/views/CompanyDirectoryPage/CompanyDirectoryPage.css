@@ -1,5 +1,7 @@
 .company-directory {
   padding: 1rem;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .company-directory__header {
@@ -50,13 +52,16 @@
   margin-top: 1rem;
   display: grid;
   gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .company-directory__panel {
   background: var(--surface);
   border: 1.5px solid var(--border);
   border-radius: 0.8rem;
-  padding: 1rem 0.2rem 1rem 0.5rem;
+  padding: 1rem 1.25rem;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .company-directory__inline-form {
@@ -123,8 +128,17 @@
   font-weight: 600;
 }
 
+.company-directory__table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-top: 0.5rem;
+}
+
 .company-directory__table {
   width: 100%;
+  min-width: 420px;
   border-collapse: collapse;
 }
 
@@ -196,6 +210,6 @@
 
 @media (min-width: 1024px) {
   .company-directory__grid {
-    grid-template-columns: 320px 1fr;
+    grid-template-columns: 320px minmax(0, 1fr);
   }
 }
