@@ -59,7 +59,7 @@
   background: var(--surface);
   border: 1.5px solid var(--border);
   border-radius: 0.8rem;
-  padding: 1rem 1.25rem;
+  padding: 1rem 0.2rem 1rem 0.5rem;
   min-width: 0;
   overflow: hidden;
 }
